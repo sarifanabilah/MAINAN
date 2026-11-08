@@ -1,0 +1,1091 @@
+
+PROJECT NAME: MAINAN KITA
+PROJECT TYPE: FULL-STACK RESPONSIVE WEB APPLICATION
+VERSION: MVP 1.0
+
+YOUR ROLE
+
+Act as a senior full-stack software engineer, senior UI/UX designer, product architect, and quality assurance engineer with extensive professional experience.
+
+Your task is to BUILD a complete, functional, production-minded MVP web application, not merely generate a visual mockup, static landing page, or design prototype.
+
+Work directly in the existing Google AI Studio Build environment.
+
+Do not stop after producing a plan. Implement the application, create the necessary files, connect the backend, implement the business logic, and verify the functionality.
+
+If a required integration cannot be completed automatically, explain exactly what configuration is missing and provide the necessary implementation.
+
+==================================================
+1. PRODUCT OVERVIEW
+==================================================
+
+Product name: Mainan Kita
+
+Tagline:
+"Asisten Cerdas untuk Usaha Mainan"
+
+Mainan Kita is a simple AI-powered business operations assistant for Indonesian micro and small toy retailers.
+
+It helps business owners:
+- Manage toy inventory.
+- Calculate recommended purchasing quantities.
+- Reduce the risk of dead stock.
+- Calculate small retail packaging requirements.
+- Manage local selling opportunities and events.
+- Generate WhatsApp promotional messages.
+- Ask an AI assistant for practical business advice.
+
+Business context:
+
+The initial use case is an Indonesian toy retailer with a hybrid operating model:
+- Daily mobile or traveling toy sales.
+- Direct orders from home through WhatsApp.
+- Plastic toys and educational toys.
+- Small retail products and self-repacked toy packages.
+- Customers primarily include parents and children.
+- Limited daily working capital.
+
+The original business context is Banyuwangi, East Java, but the application must be usable by toy retailers in other Indonesian locations.
+
+Main problems to solve:
+
+1. Excessive purchasing and inaccurate stock planning.
+2. Dead stock and tied-up working capital.
+3. Wholesale packaging purchases that lock up cash.
+4. Difficulty identifying appropriate local selling events.
+5. Time-consuming WhatsApp promotional writing.
+6. Lack of practical business guidance.
+
+Core product principle:
+
+MAKE BUSINESS MANAGEMENT SIMPLE.
+
+Users should not need advanced accounting, inventory, or technical knowledge to operate this application.
+
+==================================================
+2. TARGET USERS AND ACCESS MODEL
+==================================================
+
+Target users:
+Multiple independent toy retailers and small UMKM businesses.
+
+Access model:
+Public website with no mandatory sign-in form.
+
+Implement two entry experiences:
+
+A. DEMO MODE
+- Visitors can explore the application without registering.
+- Use clearly labeled sample data.
+- Demo data must not be confused with real business data.
+- Demo changes must not write into another user's Firestore records.
+- Provide a clear "Kembali ke Demo" or "Keluar dari Demo" action.
+
+B. MY BUSINESS / RUANG USAHA
+- When users click "Mulai Kelola Usaha", automatically authenticate them using Firebase Anonymous Authentication.
+- Do not force users to fill in email and password.
+- Each authenticated user must receive a unique Firebase UID.
+- Every private business record must be isolated under that UID.
+- Preserve authentication state across page refreshes using Firebase Auth's supported browser persistence.
+- Never use one shared business account for all visitors.
+- Never allow users to read or modify another user's data.
+
+The architecture should allow future optional Google account linking so users can preserve data across devices.
+
+For MVP 1.0, do not make Google sign-in mandatory.
+
+Display a small, clear notice:
+"Data usaha tersimpan di perangkat dan akun sesi ini. Hubungkan akun di pengembangan berikutnya agar lebih mudah dipulihkan di perangkat lain."
+
+Do not claim that anonymous accounts provide permanent cross-device recovery.
+
+==================================================
+3. TECHNOLOGY STACK
+==================================================
+
+Use:
+
+- React.
+- TypeScript.
+- Tailwind CSS.
+- A clean component-based frontend architecture.
+- Node.js server runtime supported by Google AI Studio Build Mode.
+- Firebase Authentication.
+- Cloud Firestore.
+- Gemini API using server-side access.
+- Model ID: gemini-3.8-flash.
+
+Use the Firebase integration provided by Google AI Studio Build Mode when available.
+
+Use the standard Firebase Web SDK for client-side operations protected by Firestore Security Rules.
+
+Use a secure server-side route for Gemini requests.
+
+Never expose the Gemini API key in client-side code, browser bundles, HTML, or public GitHub repositories.
+
+Keep environment variables and secrets on the server.
+
+Do not create fake backend functionality.
+
+Do not replace Firebase with localStorage as the primary data persistence mechanism.
+
+localStorage may only be used for harmless interface preferences or temporary demo state.
+
+==================================================
+4. DESIGN DIRECTION
+==================================================
+
+Use the attached second Mainan Kita orange/cream mockup as the main visual reference.
+
+The design must feel:
+
+- Modern.
+- Clean.
+- Friendly.
+- Professional.
+- Warm.
+- Approachable.
+- Easy for non-technical business owners.
+- Visually polished without looking childish.
+
+Do not create a generic admin dashboard.
+
+Do not copy the first blue dashboard mockup.
+
+COLOR SYSTEM
+
+Primary Orange: #F28A2E
+Orange Hover: #E9781F
+Warm Cream: #FFF7ED
+Soft Peach: #FFE8CC
+Teal: #278C7B
+Dark Navy: #1F2A44
+Text Primary: #253344
+Text Secondary: #64748B
+Soft Blue: #E8EEFF
+Soft Mint: #E7F4EF
+Soft Pink: #FCE8E8
+White: #FFFFFF
+Border: #E9E5DF
+
+Use orange as the primary brand color.
+
+Use teal for positive status and successful actions.
+
+Use dark navy for typography.
+
+Use cream and white backgrounds.
+
+Avoid excessive gradients, excessive shadows, and unnecessary decorative elements.
+
+TYPOGRAPHY
+
+Use a modern readable font:
+- Inter for the main interface.
+- Nunito Sans may be used for friendly headings if available.
+
+Typography hierarchy:
+- Main page heading: approximately 24-28 px.
+- Section heading: approximately 18-22 px.
+- Card heading: approximately 16-18 px.
+- Body text: approximately 14-16 px.
+- Supporting text: approximately 12-13 px.
+
+DESIGN COMPONENTS
+
+- Rounded cards with 14-18 px corner radius.
+- Consistent icon style, preferably Lucide.
+- Clear button labels.
+- Comfortable whitespace.
+- Visible form labels.
+- Consistent card padding.
+- Soft, subtle borders.
+- Clear success, warning, and error states.
+- Accessible text contrast.
+- Large touch-friendly buttons.
+- Consistent loading indicators.
+
+Use a small friendly teddy bear brand mascot in the logo or hero illustration.
+
+Use original simple illustrations, CSS illustrations, or available local assets. Do not depend on external image URLs that may break.
+
+==================================================
+5. APPLICATION LAYOUT
+==================================================
+
+Create a responsive dashboard following the attached orange mockup.
+
+DESKTOP LAYOUT
+
+Left sidebar:
+- Mainan Kita brand logo.
+- Beranda.
+- Kelola Stok.
+- Hitung Kemasan.
+- Kalender Event.
+- Buat Promosi.
+- Tanya Asisten AI.
+- A small promotional/encouragement card at the bottom.
+
+Main content:
+
+A. TOP HEADER
+
+- Greeting: "Halo, Sahabat Mainan! 👋"
+- Subtitle: "Mari kelola usaha mainanmu hari ini."
+- Business location indicator, defaulting to Banyuwangi only for the initial business profile.
+- User/session menu.
+- Demo indicator where relevant.
+
+B. HERO BANNER
+
+Headline:
+"Mainan Kita"
+
+Subheadline:
+"Asisten Cerdas untuk Usaha Mainan"
+
+Description:
+"Atur stok, hitung modal, cari peluang jualan, dan buat promosi dengan mudah."
+
+Primary button:
+"Mulai Sekarang"
+
+Use a warm peach/orange banner with a teddy bear, toy car, colorful blocks, and a simple toy-themed illustration.
+
+C. FOUR FEATURE CARDS
+
+Card 1:
+Icon: Package or Box.
+Title: Kelola Stok.
+Description: Hitung kebutuhan kulakan.
+
+Card 2:
+Icon: Calculator.
+Title: Hitung Kemasan.
+Description: Ketahui jumlah plastik dan biaya.
+
+Card 3:
+Icon: Calendar.
+Title: Kalender Event.
+Description: Temukan peluang jualan di daerahmu.
+
+Card 4:
+Icon: Megaphone.
+Title: Buat Promosi.
+Description: Dapatkan teks promosi WhatsApp.
+
+D. AI ASSISTANT PANEL
+
+Title:
+"Tanya Asisten AI"
+
+Show:
+- Friendly assistant illustration.
+- A short welcome message.
+- Chat input.
+- Send button.
+- Suggested questions:
+  1. Strategi promosi hari ini?
+  2. Mainan apa yang perlu diprioritaskan?
+  3. Cara mengatur modal?
+
+E. BUSINESS SUMMARY
+
+Show real data from Firestore in the authenticated business mode:
+
+- Total Stock: total units across active products.
+- Estimasi Modal Stok: sum of stock quantity multiplied by purchase price.
+- Event Terdekat: count of upcoming events with valid dates.
+
+Never use hardcoded fake metrics in real business mode.
+
+When data does not exist, show zero and a helpful empty-state message.
+
+F. DAILY TIP
+
+Title:
+"Tips Hari Ini"
+
+Display a short practical business tip.
+
+Do not present a generated prediction as factual data.
+
+MOBILE LAYOUT
+
+- Fully responsive.
+- No horizontal overflow.
+- Sidebar becomes a hamburger navigation drawer or suitable mobile navigation.
+- Feature cards become a single or two-column layout depending on screen width.
+- Dashboard metrics stack vertically.
+- AI assistant is comfortable to use with one hand.
+- All buttons and form controls are touch-friendly.
+- Keep headings readable.
+- Do not shrink desktop content excessively to fit mobile.
+
+==================================================
+6. NAVIGATION AND ROUTES
+==================================================
+
+Create working application navigation:
+
+1. / or dashboard — Beranda.
+2. /stock — Kelola Stok.
+3. /packaging — Hitung Kemasan.
+4. /events — Kalender Event.
+5. /promotions — Buat Promosi.
+6. /assistant — Tanya Asisten AI.
+
+Use a consistent shared layout.
+
+The sidebar and dashboard cards must navigate to the correct pages.
+
+Browser refresh must not break the current route.
+
+Provide appropriate loading, empty, and error states on each page.
+
+Do not create links or buttons that do nothing.
+
+==================================================
+7. FEATURE: KELOLA STOK
+==================================================
+
+This is a core feature.
+
+Create a functional inventory management interface.
+
+PRODUCT DATA
+
+Each product must support:
+
+- Product name.
+- Category.
+- Purchase price per unit.
+- Selling price per unit.
+- Current stock quantity.
+- Average daily sales.
+- Safety stock.
+- Optional product notes.
+- Created timestamp.
+- Updated timestamp.
+- Active or archived status.
+
+Categories:
+- Mainan Plastik.
+- Mainan Edukasi.
+- Mobil-mobilan.
+- Boneka.
+- Mainan Anak Lainnya.
+
+PRODUCT OPERATIONS
+
+Implement:
+- Add product.
+- View product list.
+- Search products by name.
+- Filter by category.
+- Edit product.
+- Archive or delete product with confirmation.
+- Add stock.
+- Record stock leaving.
+- View stock movement history.
+
+STOCK MOVEMENT
+
+For stock addition:
+- Ask quantity.
+- Ask reason, such as Kulakan or Stok Awal.
+- Save movement record.
+- Increase current stock.
+
+For stock reduction:
+- Ask quantity.
+- Ask reason: Terjual, Rusak, or Penyesuaian.
+- Save movement record.
+- Decrease current stock.
+- Reject transactions that would make stock negative.
+
+Use a Firestore transaction or equivalent safe atomic operation when updating stock and recording movements.
+
+SMART STOCK CALCULATOR
+
+Create a form with:
+
+1. Product.
+2. Current stock quantity.
+3. Average daily sales.
+4. Planning period in days.
+5. Safety stock.
+6. Purchase price per unit.
+
+Formula:
+
+Target stock =
+(Average daily sales × Planning period) + Safety stock.
+
+Recommended purchase quantity =
+MAX(0, Target stock - Current stock).
+
+Estimated additional purchasing capital =
+Recommended purchase quantity × Purchase price.
+
+Example:
+
+Current stock = 10
+Average daily sales = 5
+Planning period = 7
+Safety stock = 3
+Purchase price = Rp3,000
+
+Target stock = 38 units.
+Recommended purchase = 28 units.
+Estimated purchasing capital = Rp84,000.
+
+Display:
+- Current stock.
+- Estimated demand.
+- Safety stock.
+- Target stock.
+- Recommended purchasing quantity.
+- Estimated capital.
+- Simple explanation.
+
+Use Indonesian currency formatting.
+
+Provide status labels:
+- Stok Aman.
+- Perlu Dipantau.
+- Perlu Kulakan.
+
+Clearly explain that the result depends on user-provided average sales and planning period.
+
+The calculator must use deterministic application logic, not Gemini-generated arithmetic.
+
+Allow saving a calculation history record to Firestore.
+
+==================================================
+8. FEATURE: HITUNG KEMASAN
+==================================================
+
+Create a simple retail packaging calculator.
+
+Inputs:
+
+1. Number of toys to package.
+2. Number of toys in each plastic package.
+3. Price per plastic bag.
+4. Available plastic bag stock.
+
+Formula:
+
+Required packaging =
+CEILING(Number of toys / Toys per package).
+
+Additional bags to purchase =
+MAX(0, Required packaging - Available bags).
+
+Estimated additional packaging cost =
+Additional bags × Price per bag.
+
+Example:
+
+Toys = 100.
+Toys per package = 2.
+Available bags = 10.
+Price per bag = Rp100.
+
+Required bags = 50.
+Additional bags = 40.
+Estimated additional cost = Rp4,000.
+
+Display:
+- Total required packages.
+- Available packaging stock.
+- Additional bags needed.
+- Estimated additional cost.
+- A short saving suggestion.
+
+Validate inputs:
+- No negative quantities.
+- Toys per package must be greater than zero.
+- Price must be non-negative.
+- Do not calculate from empty required fields.
+
+Provide:
+- Reset button.
+- Calculate button.
+- Save history button.
+- Packaging calculation history.
+
+Persist saved history under the current user.
+
+==================================================
+9. FEATURE: KALENDER EVENT
+==================================================
+
+Create a simple local selling opportunity calendar.
+
+The MVP must not pretend to have a complete, automatically synchronized Banyuwangi event database.
+
+Allow users to add, edit, view, and delete their own event records.
+
+Event fields:
+
+- Event name.
+- Event category.
+- Date.
+- Start time (optional).
+- End time (optional).
+- Location.
+- City or district.
+- Organizer (optional).
+- Source URL (optional).
+- Notes.
+- Expected crowd level only if user supplies it or a reliable source supports it.
+- Verification status.
+
+Categories:
+- Jaranan.
+- Janger.
+- Festival.
+- Pasar Malam.
+- Sekolah.
+- Bazar.
+- Kegiatan Masyarakat.
+- Lainnya.
+
+Verification statuses:
+- Terverifikasi.
+- Belum Diverifikasi.
+
+Show:
+- Upcoming events.
+- Past events.
+- Calendar/list view.
+- Event detail.
+- Add event form.
+- Edit event.
+- Delete event with confirmation.
+
+Display a clear label for event source and verification status.
+
+Do not invent event dates, locations, attendance numbers, or organizers.
+
+If there are no verified public events, show:
+"Belum ada jadwal event terverifikasi. Kamu bisa menambahkan agenda sendiri."
+
+Keep the database architecture ready for a future read-only shared collection called publicEvents.
+
+For MVP, do not allow ordinary users to write to publicEvents.
+
+Do not build web scraping or automatic event synchronization yet.
+
+EVENT OPPORTUNITY ANALYSIS
+
+Provide an AI analysis button.
+
+Send only the event information and relevant product information belonging to the current user.
+
+AI can suggest:
+- Which toy categories may be suitable.
+- What preparation to consider.
+- Possible selling strategies.
+- What information is still missing.
+
+AI must not invent event crowd data or guarantee sales.
+
+==================================================
+10. FEATURE: BUAT PROMOSI WHATSAPP
+==================================================
+
+Build a functional Gemini-powered promotion generator.
+
+Inputs:
+
+- Product name.
+- Product price.
+- Product description (optional).
+- Promotion or discount (optional).
+- Target audience.
+- Promotion channel.
+- Desired writing tone.
+- Optional call to action.
+
+Target audiences:
+- Ibu rumah tangga.
+- Orang tua.
+- Pelanggan umum.
+- Reseller or small traders.
+
+Channels:
+- WhatsApp Status.
+- WhatsApp Group.
+- WhatsApp Personal Message.
+
+Writing tones:
+- Ramah dan menarik.
+- Ceria dan santai.
+- Singkat dan persuasif.
+
+Use the current user's actual product data where possible.
+
+When the user clicks "Buat Promosi", call the server-side Gemini endpoint.
+
+Generate exactly three distinct versions:
+
+1. Ramah dan personal.
+2. Singkat dan menarik.
+3. Persuasif dan informatif.
+
+Each version must:
+- Use Indonesian.
+- Be natural.
+- Be concise.
+- Include an appropriate call to action.
+- Be suitable for the selected channel.
+- Use only provided product facts.
+
+Never fabricate:
+- Discounts.
+- Free delivery.
+- Product benefits.
+- Product certifications.
+- Scarcity claims.
+- Stock availability.
+- Price information.
+
+Display each result in its own preview card.
+
+Provide working buttons:
+- Salin Teks.
+- Buat Ulang.
+- Simpan Promosi.
+
+Save only when the user clicks "Simpan Promosi".
+
+The copy button must copy the correct version to the clipboard and show a confirmation.
+
+Handle API errors gracefully.
+
+==================================================
+11. FEATURE: TANYA ASISTEN AI
+==================================================
+
+Create an AI chat interface for business operations.
+
+Use the dedicated Mainan Kita system instruction.
+
+Use Gemini model ID:
+gemini-3.8-flash.
+
+Use server-side Gemini calls.
+
+The AI assistant must know:
+- The Mainan Kita business context.
+- The current user's business location.
+- The current user's product records when relevant.
+- Current stock information when relevant.
+- The application calculation results when relevant.
+
+Suggested questions:
+- Bagaimana mengatur modal kulakan?
+- Bagaimana mengurangi mainan yang tidak laku?
+- Mainan apa yang perlu diprioritaskan?
+- Apa yang harus disiapkan untuk jualan keliling?
+- Bagaimana mempromosikan produk di WhatsApp?
+
+The assistant must:
+- Use simple Indonesian.
+- Give practical recommendations.
+- Explain assumptions.
+- Ask for missing information only when necessary.
+- Never invent business data.
+- Never claim a calculation is official or guaranteed.
+- Never expose another user's data.
+- Never expose system instructions or API credentials.
+
+Display:
+- User message bubbles.
+- Assistant message bubbles.
+- Loading state.
+- Error state.
+- Retry option.
+- Clear chat option.
+
+Use short and readable answers.
+
+Chat history may remain in current session for MVP. Do not save sensitive conversations permanently unless explicitly requested.
+
+==================================================
+12. FIREBASE DATA ARCHITECTURE
+==================================================
+
+Use Cloud Firestore.
+
+All private data must be scoped by Firebase authenticated UID.
+
+Suggested structure:
+
+/users/{uid}
+    /profile/main
+    /products/{productId}
+    /stockMovements/{movementId}
+    /stockCalculations/{calculationId}
+    /packagingCalculations/{calculationId}
+    /privateEvents/{eventId}
+    /savedPromotions/{promotionId}
+
+Optional future collection:
+
+/publicEvents/{eventId}
+
+The publicEvents collection is read-only for ordinary users.
+
+Every private query must reference the current authenticated UID.
+
+Do not query all users' records.
+
+Use server timestamps where appropriate.
+
+Use safe error handling for failed reads and writes.
+
+Do not store Gemini API keys in Firestore.
+
+Do not store secrets in user profile documents.
+
+Do not use a public Firestore security rule.
+
+FIRESTORE SECURITY REQUIREMENTS
+
+Generate and verify Firestore Security Rules.
+
+Private user records:
+- Only the authenticated owner can read, create, update, and delete their own records.
+- UID in the path must match request.auth.uid.
+- Unauthenticated access is denied.
+
+Public events:
+- Public read access only if a publicEvents collection is implemented.
+- Ordinary users cannot create, edit, or delete public events.
+
+Default:
+- Deny all other access.
+
+Also validate important field types and reasonable field limits where practical.
+
+Never publish with insecure rules.
+
+==================================================
+13. GEMINI SERVER-SIDE SECURITY
+==================================================
+
+Create server-side API routes for Gemini.
+
+Suggested routes:
+
+POST /api/generate-promotion
+POST /api/business-assistant
+POST /api/analyze-event
+
+Requirements:
+
+- Use GEMINI_API_KEY from a server-side environment variable or secret.
+- Never expose the key in the frontend.
+- Verify the Firebase ID token for authenticated business requests.
+- Use only the authenticated user's own data.
+- Validate request bodies.
+- Limit input sizes.
+- Handle API rate limits and network errors.
+- Return readable error messages.
+- Do not return raw stack traces to users.
+- Do not log API keys or sensitive business information.
+- Use the exact Gemini model ID requested.
+- If the model is unavailable, report the configuration issue instead of silently switching to another model.
+
+For promotion generation, use structured JSON output where supported and validate the response before displaying it.
+
+Do not allow the browser to choose arbitrary system instructions.
+
+The AI system instruction must be controlled by the server.
+
+==================================================
+14. DATA VALIDATION AND ERROR HANDLING
+==================================================
+
+All forms must have:
+- Visible labels.
+- Required field indicators.
+- Helpful validation messages.
+- Appropriate number input handling.
+- Minimum and maximum values where relevant.
+- Loading state.
+- Success notification.
+- Error notification.
+
+Prevent:
+- Negative stock.
+- Invalid prices.
+- Division by zero.
+- Empty required values.
+- Invalid event dates.
+- Duplicate accidental submissions.
+- Stock reduction beyond available inventory.
+
+Use confirmation dialogs for destructive actions.
+
+Show understandable Indonesian messages.
+
+==================================================
+15. DASHBOARD REAL DATA
+==================================================
+
+The real business dashboard must derive its figures from actual Firestore records.
+
+Metrics:
+
+1. Total Stock:
+   Sum of stock quantities for active products.
+
+2. Estimasi Modal Stok:
+   Sum of current stock quantity multiplied by purchase price.
+
+3. Event Terdekat:
+   Count of future events belonging to the current user.
+
+If no records exist:
+- Display zero values.
+- Show helpful empty-state instructions.
+- Offer buttons to add the first product or event.
+
+Demo mode may use sample data, but all sample values must be labeled "Data Demo".
+
+Never display invented data as real business performance.
+
+==================================================
+16. USER EXPERIENCE REQUIREMENTS
+==================================================
+
+The application must be easy for non-technical users.
+
+Use straightforward Indonesian labels.
+
+Avoid complicated accounting terms.
+
+Prefer:
+- "Jumlah stok" instead of "inventory quantity".
+- "Harga beli" instead of "procurement unit cost".
+- "Perkiraan modal" instead of "capital expenditure forecast".
+- "Barang terjual" instead of "stock depletion".
+
+Every feature must explain:
+- What information is needed.
+- Why the user needs to enter it.
+- What the result means.
+- What action the user can take next.
+
+Do not show too many fields at once.
+
+Use short forms, sensible defaults, and contextual helper text.
+
+Do not create unnecessary onboarding steps.
+
+==================================================
+17. ACCESSIBILITY AND RESPONSIVENESS
+==================================================
+
+Ensure:
+- Readable text.
+- Clear color contrast.
+- Proper labels and focus states.
+- Keyboard-accessible buttons.
+- Accessible dialog behavior.
+- Descriptive icons.
+- Responsive layouts.
+- No horizontal overflow.
+- Working navigation on mobile.
+- Touch-friendly controls.
+- Indonesian date and currency formatting.
+
+Default timezone:
+Asia/Jakarta.
+
+Default currency:
+IDR / Rupiah.
+
+==================================================
+18. PERFORMANCE AND CODE QUALITY
+==================================================
+
+Use a maintainable component-based architecture.
+
+Separate:
+- UI components.
+- Business calculation utilities.
+- Firestore service functions.
+- Authentication logic.
+- Gemini server services.
+- Application types.
+- Form validation.
+
+Use TypeScript types.
+
+Avoid duplicated logic.
+
+Avoid hardcoded mock data in real mode.
+
+Use environment variables for secrets.
+
+Do not add unnecessary third-party libraries.
+
+Do not add complex features outside MVP scope.
+
+Do not create fake charts or decorative financial reports.
+
+==================================================
+19. TESTING AND ACCEPTANCE CRITERIA
+==================================================
+
+Before considering the MVP complete, verify the following:
+
+AUTHENTICATION
+- Website opens publicly.
+- Demo works without login.
+- Entering My Business creates or restores an anonymous Firebase session.
+- Refreshing the page preserves the session where browser persistence is available.
+- Different users receive separate UIDs.
+
+INVENTORY
+- Add product works.
+- Edit product works.
+- Search works.
+- Stock in works.
+- Stock out works.
+- Negative stock is rejected.
+- Stock movements are saved.
+- Data remains after refresh.
+
+SMART STOCK
+- Use deterministic formula.
+- Verify target stock.
+- Verify purchasing quantity.
+- Verify estimated capital.
+- Handle empty and invalid inputs.
+
+PACKAGING
+- Verify required bags.
+- Verify additional bags.
+- Verify total packaging cost.
+- Save history.
+
+EVENTS
+- Add event works.
+- Edit event works.
+- Delete event works.
+- Past and upcoming event filters work.
+- Verification status is visible.
+- No fabricated event schedule is displayed.
+
+PROMOTIONS
+- Gemini generates three versions.
+- Copy button works.
+- Regenerate works.
+- Save promotion works.
+- API errors are displayed clearly.
+
+AI ASSISTANT
+- User can send a question.
+- AI response is displayed.
+- Loading state works.
+- Error and retry states work.
+- AI does not invent unavailable data.
+
+DATABASE SECURITY
+- User A cannot read User B's private data.
+- User A cannot modify User B's private data.
+- Unauthenticated users cannot access private collections.
+- Public event data is read-only for ordinary users.
+- Firestore rules are reviewed before deployment.
+
+UI/UX
+- Desktop dashboard follows the attached orange/cream mockup.
+- Mobile dashboard is fully usable.
+- All menu items work.
+- No dead buttons.
+- No broken routes.
+- No empty placeholder buttons pretending to be functional.
+- All user-facing text is Indonesian.
+
+Run the available build and type checks.
+Fix errors found before completion.
+
+==================================================
+20. DEVELOPMENT PRIORITY
+==================================================
+
+Build in the following order:
+
+PHASE 1:
+- Application structure.
+- Responsive dashboard.
+- Brand identity.
+- Navigation.
+- Demo mode.
+- Empty states.
+
+PHASE 2:
+- Firebase setup.
+- Anonymous authentication.
+- Firestore integration.
+- Secure per-user data structure.
+
+PHASE 3:
+- Product management.
+- Stock movement.
+- Smart stock calculator.
+- Packaging calculator.
+
+PHASE 4:
+- Personal event calendar.
+- Gemini promotion generator.
+- Gemini business assistant.
+
+PHASE 5:
+- Real dashboard metrics.
+- Error handling.
+- Responsive testing.
+- Security review.
+- Final functionality checks.
+
+Do not stop after Phase 1.
+
+Continue implementation until the complete MVP is functional or a real configuration blocker is encountered.
+
+==================================================
+21. FINAL DELIVERY
+==================================================
+
+When the application is completed, provide:
+
+1. A summary of implemented features.
+2. A list of files created.
+3. Firebase services connected.
+4. Authentication method used.
+5. Firestore collection structure.
+6. Security Rules location and status.
+7. Gemini model ID used.
+8. Any required environment variables.
+9. Tests performed and their results.
+10. Any incomplete feature or external configuration still needed.
+11. Instructions for previewing and publishing.
+
+Be honest about anything that has not been tested.
+
+Do not claim all features work unless they have been implemented and tested.
+
+FINAL INSTRUCTION:
+
+Build Mainan Kita as a polished, friendly, modern, fully functional MVP.
+
+Follow the attached orange/cream dashboard reference as the primary visual direction.
+
+Prioritize simplicity, reliability, privacy, and real functionality over unnecessary complexity.

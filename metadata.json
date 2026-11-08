@@ -1,0 +1,6 @@
+{
+  "name": "Mainan Kita",
+  "description": "Asisten Cerdas untuk Usaha Mainan - Atur stok, hitung modal kulakan, hitung kemasan, cari peluang jualan, dan buat promosi WhatsApp untuk UMKM mainan.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
